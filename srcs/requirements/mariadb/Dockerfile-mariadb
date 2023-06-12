@@ -5,15 +5,14 @@ WORKDIR /app
 ARG APP_USER=mysql
 
 RUN apk -U upgrade && \
-    apk add --no-cache mariadb mariadb-client mariadb-server-utils && \
-    rm -f /var/cache/apk/*
+    apk add --no-cache mysql mariadb mariadb-client procps vim
 
-RUN mkdir -p /run/mysqld && \
-    chown -R ${APP_USER}:${APP_USER} /run/mysqld && \
-    chmod 750 /run/mysqld && \
+RUN mkdir -p /var/run/mysqld && \
+    chown -R ${APP_USER}:${APP_USER} /var/run/mysqld && \
+    chmod -R 750 /var/run/mysqld && \
     mkdir -p /var/lib/mysql && \
     chown -R ${APP_USER}:${APP_USER} /var/lib/mysql && \
-    chmod 750 /var/lib/mysql && \
+    chmod -R 750 /var/lib/mysql && \
     mkdir -p /var/log/mysql && \
     chown -R ${APP_USER}:${APP_USER} /var/log/mysql && \
     chmod -R 750 /var/log/mysql
@@ -22,11 +21,10 @@ RUN mysql_install_db --user=${APP_USER} --datadir=/var/lib/mysql
 
 COPY ./conf/my.cnf /etc/my.cnf
 
-COPY ./tools/init.sh .
+COPY ./tools/ .
 
-RUN chmod +x /app/init.sh && \
-    chown ${APP_USER}:${APP_USER} /app/init.sh && \
-    chmod 750 /app/init.sh
+RUN chown -R ${APP_USER}:${APP_USER} /app && \
+    chmod -R 750 /app
 
 USER ${APP_USER}:${APP_USER}
 

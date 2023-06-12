@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+    mariadb:
+      container_name: mariadb-container
+      build:
+        context: .
+        dockerfile: Dockerfile-mariadb
+      image: mariadb-try:v1
+      volumes:
+        - www-data:/var/lib/mysql
+      ports:
+        - 3309:3306
+      env_file:
+        - ../../.env
+      networks:
+        - wp-nginx-mariadb
+
+networks:
+  wp-nginx-mariadb:
+
+volumes:
+  www-data:

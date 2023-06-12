@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+    nginx:
+      container_name: nginx-container
+      build:
+        context: .
+        dockerfile: Dockerfile-nginx
+      image: nginx-try:v1
+      ports:
+        - 443: 443
+        - 80: 80

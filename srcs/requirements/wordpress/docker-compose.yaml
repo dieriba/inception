@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+    wordpress:
+      build:
+        context: '.'
+        dockerfile: Dockerfile-wordpress
+      volumes:
+        - www-data: /var/www/html
+      image: wordpress-try:v1
+      env_file : ../../env
+      networks:
+        - wp-nginx-mariadb
+
+networks:
+  wp-nginx-mariadb:
+
+volumes:
+  www-data:

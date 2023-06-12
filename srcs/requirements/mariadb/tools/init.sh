@@ -1,9 +1,5 @@
 #!/bin/sh
 
-mysql -e "CREATE DATABASE IF NOT EXISTS \`${MARIADB_DB_NAME}\`;"
-mysql -e "CREATE USER IF NOT EXISTS \`${ADMIN_USERNAME}\`@'localhost' IDENTIFIED BY '${ADMIN_PASSWORD}';"
-mysql -e "GRANT ALL PRIVILEGES ON \`${MARIADB_DB_NAME}\`.* TO \`${ADMIN_USERNAME}\`@'%' IDENTIFIED BY '${ADMIN_PASSWORD}';"
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PASSWORD}';"
-mysql -e "FLUSH PRIVILEGES;"
+mysql -u root < ./init.sql
 
 exec mysqld_safe;
