@@ -6,9 +6,9 @@ services:
         context: '.'
         dockerfile: Dockerfile-wordpress
       volumes:
-        - www-data: /var/www/html
+        - www-data:/usr/share/webapps/wordpress
       image: wordpress-try:v1
-      env_file : ../../env
+      env_file : ../../.env
       networks:
         - wp-nginx-mariadb
 

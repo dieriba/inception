@@ -5,7 +5,7 @@ WORKDIR /app
 ARG APP_USER=mysql
 
 RUN apk -U upgrade && \
-    apk add --no-cache mysql mariadb mariadb-client procps vim
+    apk add --no-cache mysql mariadb mariadb-client vim
 
 RUN mkdir -p /var/run/mysqld && \
     chown -R ${APP_USER}:${APP_USER} /var/run/mysqld && \

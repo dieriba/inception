@@ -7,7 +7,9 @@ services:
         dockerfile: Dockerfile-nginx
       image: nginx-try:v1
       volumes:
-        - www-data: /var/www/localhost/htdocs:ro
+        - www-data:/var/www/localhost/htdocs:ro
       ports:
-        - 443: 443
-        - 80: 80
+        - 443:443
+
+volumes:
+  www-data:

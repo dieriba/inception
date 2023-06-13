@@ -9,8 +9,6 @@ services:
       image: mariadb-try:v1
       volumes:
         - data:/var/lib/mysql
-      ports:
-        - 3309:3306
       env_file:
         - ../../.env
       networks:
@@ -20,4 +18,4 @@ networks:
   wp-nginx-mariadb:
 
 volumes:
-  www-data:
+  data:

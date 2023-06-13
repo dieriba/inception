@@ -1,5 +1,7 @@
 #!/bin/sh
 
-mysql -u root < ./init.sql
+mkdir mdr;
+
+mysql -u root < ./init.sql > lol
 
 exec mysqld_safe;

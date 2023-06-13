@@ -1,57 +1,42 @@
-FROM alpine:3.18
-
-WORKDIR /app
-
+FROM alpine:3.15
 
 ARG APP_USER=www-data
 
 RUN delgroup ${APP_USER} && addgroup -S ${APP_USER} && adduser -S ${APP_USER} -G ${APP_USER}
 
-RUN mkdir -p /var/www/html
+WORKDIR /app
 
-WORKDIR /var/www/html
-
-RUN apk update && apk add --no-cache \
-    php7 \
-    php7-fpm \
+RUN apk update && apk add --no-cache curl \
+    wget \
+    php7 \ 
+    php7-phar \
+    php7-fpm \ 
     php7-opcache \
+    php7-gd \
     php7-mysqli \
     php7-zlib \
     php7-curl \
     php7-mbstring \
     php7-json \
     php7-session \
-    php7-openssl \
-    php7-dom \
-    php7-pdo \
-    php7-pdo_mysql \
-    php7-phar \
-    php7-xml \
-    php7-tokenizer \
-    php7-xmlwriter \
-    php7-fileinfo \
-    php7-simplexml \
-    php7-xmlreader \
-    php7-gd \
-    php7-ctype \
-    php7-intl \
-    php7-iconv \
-    php7-bcmath \
-    php7-imagick \
-    php7-redis
+    mariadb-client
 
-RUN apk add --no-cache curl && \
-    curl -o wordpress.tar.gz -fSL https://wordpress.org/latest.tar.gz && \
-    tar -xzf wordpress.tar.gz --strip-components=1 && \
-    rm -rf wordpress.tar.gz && \
-    chown -R ${APP_USER}:${APP_USER} /var/www/html && \
-    chmod -R 755 /var/www/html
+COPY ./tools/ /app/
 
 RUN chown -R ${APP_USER}:${APP_USER} /app && \
-    chmod -R 750 /app
+    chmod -R 750 /app && \
+    chown -R ${APP_USER}:${APP_USER} /var/log/php7 && \
+    chmod -R 755 /var/log/php7
+
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+	chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
+
+WORKDIR /usr/share/webapps/wordpress
+
+RUN wp core download --version=6.2.2 && \
+    chown -R ${APP_USER}:${APP_USER} /usr/share/webapps && \
+    chmod -R 755 /usr/share/webapps
 
 USER ${APP_USER}:${APP_USER}
 
-EXPOSE 3306
-
-CMD ["php-fpm7", "-F"]
+ENTRYPOINT ["/app/init.sh"]

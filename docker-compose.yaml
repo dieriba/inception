@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+
+    mariadb:
+      container_name: mariadb-container
+      build:
+        context: ./srcs/requirements/mariadb
+        dockerfile: Dockerfile-mariadb
+      image: mariadb-image:v1
+      volumes:
+        - data:/var/lib/mysql
+      env_file:
+        - ./srcs/.env
+      networks:
+        - wp-nginx-mariadb
+
+    wordpress:
+      container_name: wordpress-container
+      build:
+        context: ./srcs/requirements/wordpress
+        dockerfile: Dockerfile-wordpress
+      depends_on:
+        - mariadb
+      volumes:
+        - www-data:/usr/share/webapps/wordpress
+      image: wordpress-image:v1
+      env_file : ./srcs/.env
+      networks:
+        - wp-nginx-mariadb
+
+    nginx:
+      container_name: nginx-container
+      build:
+        context: ./srcs/requirements/nginx
+        dockerfile: Dockerfile-nginx
+      depends_on:
+        - wordpress
+      image: nginx-image:v1
+      volumes:
+        - www-data:/var/www/localhost/htdocs:ro
+      ports:
+        - 443:443
+
+networks:
+  wp-nginx-mariadb:
+
+volumes:
+  www-data:
+  data:
