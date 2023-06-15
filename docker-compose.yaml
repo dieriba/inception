@@ -38,9 +38,11 @@ services:
         - wordpress
       image: nginx-image:v1
       volumes:
-        - www-data:/var/www/localhost/htdocs:ro
+        - www-data:/usr/share/webapps/wordpress:ro
       ports:
         - 443:443
+      networks:
+        - wp-nginx-mariadb
 
 networks:
   wp-nginx-mariadb:

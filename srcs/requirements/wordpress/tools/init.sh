@@ -2,6 +2,7 @@
 
 cd ${WORDPRESS_PATH_DIRECTORY}
 
+if command -v wp-core >/dev/null 2>&1; then
 wp config create --allow-root \
                  --dbname=${MARIADB_DB_NAME} \
                  --dbuser=${MARIADB_ADMIN_USERNAME} \
@@ -21,8 +22,6 @@ wp user create	--allow-root ${WORDPRESS_BASE_USER_USERNAME} \
 			    --role=author;
 
 wp option update permalink_structure '/%postname%/';
-
-wp plugin uninstall hello akismet;
-wp theme delete twentytwenty twentynineteen;
+fi
 
 exec php-fpm7 -F;
