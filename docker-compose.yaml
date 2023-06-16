@@ -8,41 +8,69 @@ services:
         context: ./srcs/requirements/mariadb
         dockerfile: Dockerfile-mariadb
       image: mariadb-image:v1
+      restart: unless-stopped
       volumes:
         - data:/var/lib/mysql
       env_file:
         - ./srcs/.env
       networks:
         - wp-nginx-mariadb
+      healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+        interval: 10s
+        timeout: 5s
+        retries: 3
 
     wordpress:
       container_name: wordpress-container
       build:
         context: ./srcs/requirements/wordpress
         dockerfile: Dockerfile-wordpress
-      depends_on:
-        - mariadb
+      image: wordpress-image:v1
+      restart: unless-stopped
       volumes:
         - www-data:/usr/share/webapps/wordpress
-      image: wordpress-image:v1
       env_file : ./srcs/.env
       networks:
         - wp-nginx-mariadb
+      depends_on:
+        mariadb:
+          condition: service_healthy
+        redis:
+          condition: service_healthy
 
     nginx:
       container_name: nginx-container
       build:
         context: ./srcs/requirements/nginx
         dockerfile: Dockerfile-nginx
-      depends_on:
-        - wordpress
       image: nginx-image:v1
+      restart: unless-stopped
       volumes:
         - www-data:/usr/share/webapps/wordpress:ro
       ports:
         - 443:443
       networks:
         - wp-nginx-mariadb
+      depends_on:
+        - wordpress
+      
+    redis:
+      container_name: redis-container
+      build:
+        context: './srcs/requirements/bonus/redis'
+        dockerfile: Dockerfile-redis
+      image: redis-image:v1
+      restart: unless-stopped
+      env_file : ./srcs/.env
+      networks:
+        - wp-nginx-mariadb
+      healthcheck:
+        test: ["CMD", "redis-cli", "ping"]
+        interval: 10s
+        timeout: 5s
+        retries: 3
+
 
 networks:
   wp-nginx-mariadb:
