@@ -2,7 +2,7 @@
 
 cd ${WORDPRESS_PATH_DIRECTORY}
 
-if ! wp core is-installed; then
+if !wp core is-installed; then
 wp config create --allow-root \
                  --dbname=${MARIADB_DB_NAME} \
                  --dbuser=${MARIADB_ADMIN_USERNAME} \
