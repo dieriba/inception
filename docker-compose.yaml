@@ -30,7 +30,6 @@ services:
       restart: unless-stopped
       volumes:
         - www-data:/usr/share/webapps/wordpress
-        - redis-sock:/var/run/redis:ro
       env_file : ./srcs/.env
       networks:
         - wp-nginx-mariadb
@@ -70,8 +69,6 @@ services:
       image: redis-image:v1
       restart: unless-stopped
       env_file : ./srcs/.env
-      volumes:
-        - redis-sock:/var/run/redis
       networks:
         - wp-nginx-mariadb
       healthcheck:
@@ -104,5 +101,6 @@ networks:
 
 volumes:
   www-data:
+    name: www-data
   data:
-  redis-sock:
+    name: data
