@@ -54,7 +54,7 @@ WORKDIR /usr/share/webapps/wordpress
 
 RUN wp core download --version=${WORDPRESS_VERSION} && \
     chown -R ${APP_USER}:${APP_USER} /usr/share/webapps/wordpress && \
-    chmod -R 765 /usr/share/webapps
+    chmod -R 775 /usr/share/webapps
 
 RUN chmod +x /app/init.sh
 

@@ -93,6 +93,7 @@ services:
       ports:
         - 20:20
         - 21:21
+        - 990:990
         - 30000-30010:30000-30010
       depends_on:
         wordpress:

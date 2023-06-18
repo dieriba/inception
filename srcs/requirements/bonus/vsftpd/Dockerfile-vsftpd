@@ -6,13 +6,15 @@ ARG VSFTPD_VERSION=3.0.5-r2  OPENSSL_VERSION=3.1.1-r1
 
 RUN apk -U update && apk add --no-cache vsftpd=${VSFTPD_VERSION} \
     openssl=${OPENSSL_VERSION} \
-    openrc
+    iproute2
 
 COPY conf/vsftpd.conf /etc/vsftpd.conf
 
 COPY conf/dtoure.42.conf .
 
 COPY tools/init.sh .
+
+RUN touch  /var/log/vsftpd.log
 
 RUN chmod +x ./init.sh
 
@@ -22,6 +24,6 @@ RUN openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
     -config ./dtoure.42.conf \
     -keyout /etc/vsftpd/server.key -out /etc/vsftpd/server.crt
 
-EXPOSE 20 21 30000-30010
+EXPOSE 20 21 990 30000-30010
 
 CMD ["./init.sh"]
