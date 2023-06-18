@@ -5,9 +5,9 @@ LABEL "openssl-version"="3.1.1-r1"
 
 WORKDIR /app
 
-ARG APP_USER=www-data NGINX_VERSION=1.24.0-r6 OPENSSL_VERSION=3.1.1-r1
+ARG APP_USER=www-data NGINX_VERSION=1.24.0-r6 OPENSSL_VERSION=3.1.1-r1 
 
-RUN delgroup ${APP_USER} && addgroup -S ${APP_USER} && adduser -S ${APP_USER} -G ${APP_USER}
+RUN delgroup ${APP_USER} && addgroup -S -g 1001 ${APP_USER} && adduser -S ${APP_USER} -G ${APP_USER}
 
 RUN apk -U upgrade && \
     apk add --no-cache nginx=${NGINX_VERSION} openssl=${OPENSSL_VERSION}

@@ -1,12 +1,27 @@
-
 FROM alpine:3.18.0
 
-ARG APP_USER=vsftpd 
+WORKDIR /app
 
-RUN addgroup -S ${APP_USER} && adduser -S ${APP_USER} -G ${APP_USER}
+ARG VSFTPD_VERSION=3.0.5-r2  OPENSSL_VERSION=3.1.1-r1
 
+RUN apk -U update && apk add --no-cache vsftpd=${VSFTPD_VERSION} \
+    openssl=${OPENSSL_VERSION} \
+    openrc
 
+COPY conf/vsftpd.conf /etc/vsftpd.conf
 
-USER ${APP_USER}:${APP_USER}
+COPY conf/dtoure.42.conf .
 
-CMD []
+COPY tools/init.sh .
+
+RUN chmod +x ./init.sh
+
+RUN mkdir wordpress
+
+RUN openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
+    -config ./dtoure.42.conf \
+    -keyout /etc/vsftpd/server.key -out /etc/vsftpd/server.crt
+
+EXPOSE 20 21 30000-30010
+
+CMD ["./init.sh"]

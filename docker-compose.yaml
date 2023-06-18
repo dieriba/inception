@@ -39,6 +39,11 @@ services:
           condition: service_healthy
         redis:
           condition: service_healthy
+      healthcheck:
+        test: ["CMD-SHELL", "wp core is-installed --allow-root"]
+        interval: 20s
+        timeout: 10s
+        retries: 3
 
     nginx:
       container_name: nginx-container
@@ -48,13 +53,14 @@ services:
       image: nginx-image:v1
       restart: unless-stopped
       volumes:
-        - www-data:/usr/share/webapps/wordpress:ro
+        - www-data:/usr/share/webapps/wordpress
       ports:
         - 443:443
       networks:
         - wp-nginx-mariadb
       depends_on:
-        - wordpress
+        wordpress:
+          condition: service_healthy
       
     redis:
       container_name: redis-container
@@ -74,6 +80,23 @@ services:
         timeout: 5s
         retries: 3
 
+    vsftpd:
+      container_name: vsftpd-container
+      build:
+        context: './srcs/requirements/bonus/vsftpd'
+        dockerfile: Dockerfile-vsftpd
+      image: vsftpd-image:v1
+      volumes:
+        - www-data:/app/wordpress
+      env_file : ./srcs/.env
+      restart: unless-stopped
+      ports:
+        - 20:20
+        - 21:21
+        - 30000-30010:30000-30010
+      depends_on:
+        wordpress:
+          condition: service_healthy
 
 networks:
   wp-nginx-mariadb:

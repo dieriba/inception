@@ -1,11 +1,15 @@
 version: '3'
 
 services:
-    redis:
+    vsftpd:
       build:
         context: '.'
         dockerfile: Dockerfile-vsftpd
-      image: vsftpd:v1
+      image: vsftpd-image:v1
+      ports:
+        - 20:20
+        - 21:21
+        - 30000-30010:30000-30010
       env_file : ../../../.env
 
 networks:
