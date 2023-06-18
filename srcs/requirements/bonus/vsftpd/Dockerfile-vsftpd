@@ -1,0 +1,12 @@
+
+FROM alpine:3.18.0
+
+ARG APP_USER=vsftpd 
+
+RUN addgroup -S ${APP_USER} && adduser -S ${APP_USER} -G ${APP_USER}
+
+
+
+USER ${APP_USER}:${APP_USER}
+
+CMD []
