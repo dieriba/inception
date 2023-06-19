@@ -23,7 +23,6 @@ RUN apk -U upgrade && apk add --no-cache wget=${WGET_VERSION} \
     php81-tokenizer
 
 COPY ./conf/www.conf /etc/php81/php-fpm.d/www.conf
-COPY ./tools/adminer.php .
 
 RUN mkdir -p /var/log/php-fpm
 
