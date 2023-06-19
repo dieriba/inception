@@ -53,6 +53,7 @@ services:
       restart: unless-stopped
       volumes:
         - www-data:/usr/share/webapps/wordpress
+        - adminer-file:/usr/share/webapps/adminer
       ports:
         - 443:443
       networks:
@@ -96,10 +97,28 @@ services:
         wordpress:
           condition: service_healthy
 
+    adminer:
+      container_name: adminer-container
+      build:
+        context: './srcs/requirements/bonus/adminer'
+        dockerfile: Dockerfile-adminer
+      image: adminer-image:v1
+      volumes:
+        - adminer-file:/usr/share/webapps/adminer
+      env_file : ./srcs/.env
+      networks:
+        - wp-nginx-mariadb
+      restart: unless-stopped
+      depends_on:
+        mariadb:
+          condition: service_healthy
+
 networks:
   wp-nginx-mariadb:
 
 volumes:
+  adminer-file:
+    name: adminer-file
   www-data:
     name: www-data
   data:

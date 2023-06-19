@@ -22,9 +22,19 @@ RUN openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
     -config ./dtoure.42.conf \
     -keyout /etc/nginx/ssl/private/dtoure.42.key -out /etc/nginx/ssl/certs/dtoure.42.crt
 
-RUN chmod -R 755 /var/lib/nginx /var/log/nginx /etc/nginx /var/run/nginx
+RUN touch /var/log/nginx/wordpress_access.log && \
+    touch /var/log/nginx/wordpress_error.log && \
+    touch /var/log/nginx/adminer_access.log && \
+    touch /var/log/nginx/adminer_error.log
 
-RUN chown -R ${APP_USER}:${APP_USER} /var/lib/nginx /var/log/nginx /etc/nginx /var/run/nginx
+RUN chmod -R 755 /var/lib/nginx && \
+    chown -R ${APP_USER}:${APP_USER} /var/lib/nginx && \ 
+    chmod -R 755 /var/log/nginx && \
+    chown -R ${APP_USER}:${APP_USER} /var/log/nginx && \ 
+    chmod -R 755 /var/run/nginx && \
+    chown -R ${APP_USER}:${APP_USER} /var/run/nginx && \
+    chmod -R 755 /etc/nginx && \
+    chown -R ${APP_USER}:${APP_USER} /etc/nginx
 
 USER ${APP_USER}:${APP_USER}
 

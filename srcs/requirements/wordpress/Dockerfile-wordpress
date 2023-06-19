@@ -28,9 +28,7 @@ RUN apk -U update && apk add --no-cache curl \
     php81-session \
     php81-tokenizer \
     php81-redis \
-    mariadb-client=${MARIADB_VERSION} \
-    ip6tables \
-    ufw
+    mariadb-client=${MARIADB_VERSION}
 
 COPY ./tools/ /app/
 
