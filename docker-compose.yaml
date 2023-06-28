@@ -7,7 +7,7 @@ services:
       build:
         context: ./srcs/requirements/mariadb
         dockerfile: Dockerfile-mariadb
-      image: mariadb-image:v1
+      image: mariadb
       restart: unless-stopped
       volumes:
         - data:/var/lib/mysql
@@ -26,7 +26,7 @@ services:
       build:
         context: ./srcs/requirements/wordpress
         dockerfile: Dockerfile-wordpress
-      image: wordpress-image:v1
+      image: wordpress
       restart: unless-stopped
       volumes:
         - www-data:/usr/share/webapps/wordpress
@@ -49,7 +49,7 @@ services:
       build:
         context: ./srcs/requirements/nginx
         dockerfile: Dockerfile-nginx
-      image: nginx-image:v1
+      image: nginx
       restart: unless-stopped
       volumes:
         - www-data:/usr/share/webapps/wordpress
@@ -69,7 +69,7 @@ services:
       build:
         context: './srcs/requirements/bonus/redis'
         dockerfile: Dockerfile-redis
-      image: redis-image:v1
+      image: redis
       restart: unless-stopped
       env_file : ./srcs/.env
       networks:
@@ -85,10 +85,12 @@ services:
       build:
         context: './srcs/requirements/bonus/vsftpd'
         dockerfile: Dockerfile-vsftpd
-      image: vsftpd-image:v1
+      image: vsftpd
       volumes:
         - www-data:/app/wordpress
       env_file : ./srcs/.env
+      networks:
+        - wp-nginx-mariadb
       restart: unless-stopped
       ports:
         - 20:20
@@ -104,7 +106,7 @@ services:
       build:
         context: './srcs/requirements/bonus/adminer'
         dockerfile: Dockerfile-adminer
-      image: adminer-image:v1
+      image: adminer
       volumes:
         - adminer-file:/usr/share/webapps/adminer
       env_file : ./srcs/.env
@@ -121,7 +123,22 @@ networks:
 volumes:
   adminer-file:
     name: adminer-file
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/dtoure/data/adminer
   www-data:
     name: www-data
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/dtoure/data/wordpress
   data:
     name: data
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/dtoure/data/mariadb
