@@ -116,6 +116,17 @@ services:
       depends_on:
         mariadb:
           condition: service_healthy
+      
+    nest:
+      container_name: nest-container
+      build:
+        context: './srcs/requirements/bonus/nest'
+        dockerfile: Dockerfile-nestjs
+      image: nest
+      volumes:
+        - /home/dtoure/inception/srcs/requirements/bonus/nest:/app/nest
+      ports:
+        - 3000:3000
 
 networks:
   wp-nginx-mariadb:
