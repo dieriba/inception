@@ -8,7 +8,7 @@ networks:
 volumes:
 	bash -c "sudo docker volume ls"
 fclean: clean
-	bash -c "sudo docker image prune --force; sudo docker image rm adminer nginx wordpress mariadb redis vsftpd nest"
+	bash -c "sudo docker image prune --force; sudo docker image rm adminer:v1 nginx:v1 wordpress:v1 mariadb:v1 redis:v1 vsftpd:v1 nest:v1"
 delete_volumes:
 	bash -c "sudo docker volume rm www-data data adminer-file"
 images:

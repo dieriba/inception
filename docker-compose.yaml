@@ -7,7 +7,7 @@ services:
       build:
         context: ./srcs/requirements/mariadb
         dockerfile: Dockerfile-mariadb
-      image: mariadb
+      image: mariadb:v1
       restart: unless-stopped
       volumes:
         - data:/var/lib/mysql
@@ -26,7 +26,7 @@ services:
       build:
         context: ./srcs/requirements/wordpress
         dockerfile: Dockerfile-wordpress
-      image: wordpress
+      image: wordpress:v1
       restart: unless-stopped
       volumes:
         - www-data:/usr/share/webapps/wordpress
@@ -49,7 +49,7 @@ services:
       build:
         context: ./srcs/requirements/nginx
         dockerfile: Dockerfile-nginx
-      image: nginx
+      image: nginx:v1
       restart: unless-stopped
       volumes:
         - www-data:/usr/share/webapps/wordpress
@@ -69,7 +69,7 @@ services:
       build:
         context: './srcs/requirements/bonus/redis'
         dockerfile: Dockerfile-redis
-      image: redis
+      image: redis:v1
       restart: unless-stopped
       env_file : ./srcs/.env
       networks:
@@ -85,7 +85,7 @@ services:
       build:
         context: './srcs/requirements/bonus/vsftpd'
         dockerfile: Dockerfile-vsftpd
-      image: vsftpd
+      image: vsftpd:v1
       volumes:
         - www-data:/app/wordpress
       env_file : ./srcs/.env
@@ -106,7 +106,7 @@ services:
       build:
         context: './srcs/requirements/bonus/adminer'
         dockerfile: Dockerfile-adminer
-      image: adminer
+      image: adminer:v1
       volumes:
         - adminer-file:/usr/share/webapps/adminer
       env_file : ./srcs/.env
@@ -122,9 +122,9 @@ services:
       build:
         context: './srcs/requirements/bonus/nest'
         dockerfile: Dockerfile-nestjs
-      image: nest
+      image: nest:v1
       volumes:
-        - /home/dtoure/inception/srcs/requirements/bonus/nest:/app/nest
+        - /home/dtoure/inception/srcs/app:/app/nest
       ports:
         - 3000:3000
 

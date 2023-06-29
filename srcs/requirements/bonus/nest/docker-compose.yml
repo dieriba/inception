@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+    nest:
+      container_name: nest
+      build:
+        context: '.'
+        dockerfile: Dockerfile-nestjs
+      image: nestjs:v1
+      restart: unless-stopped
+      volumes:
+        - /home/dtoure/inception/srcs/app:/app/nest
