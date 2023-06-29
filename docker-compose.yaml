@@ -122,11 +122,27 @@ services:
       build:
         context: './srcs/requirements/bonus/nest'
         dockerfile: Dockerfile-nestjs
+      restart: unless-stopped
       image: nest:v1
       volumes:
         - /home/dtoure/inception/srcs/app:/app/nest
       ports:
         - 3000:3000
+
+    sshd:
+      container_name: sshd-container
+      build:
+        context: './srcs/requirements/bonus/sshd'
+        dockerfile: Dockerfile-sshd
+      restart: unless-stopped
+      image: sshd:v1
+      volumes:
+        - www-data:/app
+      ports:
+        - 22:22
+      depends_on:
+        wordpress:
+          condition: service_healthy
 
 networks:
   wp-nginx-mariadb:
