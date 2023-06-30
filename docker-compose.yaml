@@ -125,7 +125,7 @@ services:
       restart: unless-stopped
       image: nest:v1
       volumes:
-        - /home/dtoure/inception/srcs/app:/app/nest
+        - /home/dieri/inception/srcs/app:/app/nest
       ports:
         - 3000:3000
 
@@ -136,8 +136,9 @@ services:
         dockerfile: Dockerfile-sshd
       restart: unless-stopped
       image: sshd:v1
+      env_file : ./srcs/.env
       volumes:
-        - www-data:/app
+        - www-data:/app/wordpress
       ports:
         - 22:22
       depends_on:

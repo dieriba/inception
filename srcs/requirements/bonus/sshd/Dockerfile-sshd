@@ -14,4 +14,4 @@ RUN chmod +x ./init.sh
 
 EXPOSE 22
 
-ENTRYPOINT ["./init.sh"]
+CMD ["./init.sh"]
