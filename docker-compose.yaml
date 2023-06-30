@@ -140,7 +140,7 @@ services:
       volumes:
         - www-data:/app/wordpress
       ports:
-        - 22:22
+        - 3005:3005
       depends_on:
         wordpress:
           condition: service_healthy
