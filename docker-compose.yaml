@@ -56,7 +56,6 @@ services:
         - adminer-file:/usr/share/webapps/adminer
       ports:
         - 443:443
-        - 80:80
         - 8080:8080
       networks:
         - wp-nginx-mariadb
@@ -125,7 +124,7 @@ services:
       restart: unless-stopped
       image: nest:v1
       volumes:
-        - /home/dieri/inception/srcs/app:/app/nest
+        - /home/dtoure/inception/srcs/app:/app/nest
       ports:
         - 3000:3000
 

@@ -1,4 +1,5 @@
-all:	
+all:
+	bash -c "cd ./srcs/app; npm install"
 	bash -c "sudo docker compose build"
 	bash -c "sudo docker compose up -d"
 clean:
